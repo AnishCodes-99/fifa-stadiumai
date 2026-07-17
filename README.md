@@ -1,3 +1,4 @@
+[README.md](https://github.com/user-attachments/files/30127054/README.md)
 # ⚽ StadiumMind AI
 
 ### **AI-Powered Smart Stadium Intelligence Platform for the FIFA World Cup 2026**
@@ -34,7 +35,7 @@ The vision of StadiumMind AI is to establish a new global standard for sports ve
 
 ## ⚠️ Problem Statement
 
-Modern stadiums face critical structural bottlenecks during events with 80,000+ spectators:
+Modern stadiums face critical structural bottlenecks during events with 80,000+ attendees:
 1. **Crowd Congestion & Ingress Bottlenecks**: Long security gate lines leave thousands stranded outside during kickoff.
 2. **Navigation Complexity**: Stadium concourses are difficult to navigate for international fans.
 3. **Emergency Dispatch Latency**: Traditional radio alerts delay responder dispatch to fans in medical distress.
@@ -126,17 +127,62 @@ graph TD
   Firebase -->|Auth Service| FirebaseAuth[Firebase Auth]
   Firebase -->|Realtime database| Firestore[Cloud Firestore]
   Firestore -->|Events Telemetry| Mocks[Mock Nodes & Cloud Functions]
-2. Frontend Navigation Flow
-Mermaid diagram
-3. Real-Time Emergency Flow
-Mermaid diagram
-4. Interactive Navigation Intelligence
-Mermaid diagram
-5. Google Gemini AI Query Flow
-Mermaid diagram
-📁 Folder Structure
+```
 
+### 2. Frontend Navigation Flow
+```mermaid
+graph TD
+  Start([Start]) --> Landing[Landing Page]
+  Landing -->|Select Role / Login| Auth{Auth Checks}
+  Auth -->|Failed| Login[LoginPage]
+  Auth -->|Success / Bypass| Layout[App Shell Layout]
+  Layout --> Dashboard[Smart Dashboard]
+  Layout --> Map[Interactive Leaflet Map]
+  Layout --> AI[Gemini AI Assistant]
+  Layout --> CommandCenter[Command Center]
+  Layout --> Sustainability[Sustainability Panel]
+  Layout --> Admin[Admin Override Panel]
+```
 
+### 3. Real-Time Emergency Flow
+```mermaid
+graph TD
+  FanSOS[Fan presses SOS] -->|Write Event| Firestore[(Cloud Firestore)]
+  Firestore -->|Real-time Sync| Dispatcher[Command Center Alarm Board]
+  Dispatcher -->|Deploy Responder| Medic[Paramedic Team dispatched]
+  FanSOS -->|Broadcase Alert| Banner[Evacuation Banner displayed to all users]
+  Banner -->|Draw Path| Route[ADA Step-Free Route calculated to nearest Gate]
+```
+
+### 4. Interactive Navigation Intelligence
+```mermaid
+graph TD
+  Map[Map Interface] --> Click[Click Landmark]
+  Click --> Compute{Route Type}
+  Compute -->|Standard| Direct[Calculate Direct Path - 410m, 5 mins]
+  Compute -->|ADA Wheelchair| ADA[Calculate Step-Free Route - 620m, 9 mins]
+  Direct --> Draw[Draw Polyline on Leaflet]
+  ADA --> Draw
+```
+
+### 5. Google Gemini AI Query Flow
+```mermaid
+graph TD
+  Input[User Prompt] --> Validate{Check API Key}
+  Validate -->|Configured| GeminiCall[Query Gemini 1.5 API]
+  Validate -->|Missing| MockFallback[Smart Offline Fallback]
+  GeminiCall --> Parse[Extract Action Tags]
+  MockFallback --> Parse
+  Parse -->|Focus Action| ZoomMap[Focus Map on Landmark]
+  Parse -->|Route Action| DrawRoute[Draw Route on Map]
+  Parse --> Output[Display Text Answer]
+```
+
+---
+
+## 📁 Folder Structure
+
+```
 fifastadium-ai/
 ├── public/                 # Static public resources
 ├── src/
@@ -171,81 +217,100 @@ fifastadium-ai/
 ├── postcss.config.js       # Styles processing
 ├── tailwind.config.js      # Styling design system settings
 └── tsconfig.json           # TS configurations
-🔄 User Flow Step-by-Step
-Landing Page: Fans are greeted with modern, glowing animations highlighting tournament stats. Click Launch Dashboard.
-Authentication: Sign in securely, or use the Developer Bypass buttons (Fan / Staff / Admin) to simulate different security clearance roles.
-Smart Dashboard: Instantly view the score of the live match (USA vs. Mexico), average wait-times at gates, wind/canopy status, and current attendance.
-Interactive Map: Filter landmarks on the map. Select any gate, food court, or medical tent to view queue stats, and click Direct Path or ADA Route to render the path on the map.
-AI Assistant: Open the chat window. Ask any question or choose one of the 50 suggestions from the Suggested FAQs Guide to get localized answers.
-Sustainability: Review active eco-challenges, mark them complete, and claim Eco-Points to claim concession voucher rewards.
-Command Center (Staff/Admin clearance): Monitor live CCTV video streams, dispatch paramedics, or lock/unlock stadium gates.
-Admin Override (Admin clearance): Increment match scores, adjust sensor heartbeat intervals, or trigger emergency drills.
-Emergency SOS: Press the SOS trigger. Watch the global alert banner display, the map focus on medical teams, and the safe exit routes compute.
-Log Out: Securely sign out.
-🖥️ UI Pages Detail
-1. Landing Page
-Renders a premium, futuristic hero banner with deep space styling.
-Displays live metric tickers: 82.5K Fans, 4.8m Queue Wait, <1.2s API Latency, and 100% ADA Compliance.
-2. Smart Dashboard
-Real-time match scoring component (USA vs. Mexico).
-Congestion warning cards.
-Meteorological data showing canopy position (OPEN/CLOSED) and precipitation chance.
-Stadium Ingress Area Chart displaying the accumulation rate of fans over time.
-3. AI Assistant
-Full-height conversation panel featuring custom avatar bubbles.
-Suggested FAQs Selector: Dropdown showing the 50 FAQs. Clicking a question automatically fires a request.
-Voice Synthesis Toggles: Allows fans to listen to the AI's response via voice output.
-4. Interactive Map
-Embedded Leaflet map centered on MetLife Stadium coordinates.
-Category filtering pills at the top.
-Interactive routing sidebar display showing calculated route travel times.
-5. Command Center
-2x2 grid of simulated black security feeds overlaying bounding boxes around targets.
-Incident dispatch logs with dispatcher dispatch controls (e.g. Dispatch Team, Confirm On-Scene, Mark Resolved).
-6. Admin Panel
-Manual match score editors.
-System state controls for triggering simulated emergency drills.
-Heartbeat speed configuration slider (controls IoT sensor interval).
-7. Sustainability Dashboard
-Eco points summary widget.
-Bar charts mapping recycled vs. general trash tons over matches.
-Challenge claim cards.
-🤖 AI Engineering Deep-Dive
-Live Gemini Integration
-StadiumMind AI utilizes the @google/generative-ai package to initialize the model client:
+```
 
-typescript
+---
 
+## 🔄 User Flow Step-by-Step
 
+1. **Landing Page**: Fans are greeted with modern, glowing animations highlighting tournament stats. Click **Launch Dashboard**.
+2. **Authentication**: Sign in securely, or use the **Developer Bypass buttons** (Fan / Staff / Admin) to simulate different security clearance roles.
+3. **Smart Dashboard**: Instantly view the score of the live match (USA vs. Mexico), average wait-times at gates, wind/canopy status, and current attendance.
+4. **Interactive Map**: Filter landmarks on the map. Select any gate, food court, or medical tent to view queue stats, and click **Direct Path** or **ADA Route** to render the path on the map.
+5. **AI Assistant**: Open the chat window. Ask any question or choose one of the 50 suggestions from the **Suggested FAQs Guide** to get localized answers.
+6. **Sustainability**: Review active eco-challenges, mark them complete, and claim Eco-Points to claim concession voucher rewards.
+7. **Command Center** *(Staff/Admin clearance)*: Monitor live CCTV video streams, dispatch paramedics, or lock/unlock stadium gates.
+8. **Admin Override** *(Admin clearance)*: Increment match scores, adjust sensor heartbeat intervals, or trigger emergency drills.
+9. **Emergency SOS**: Press the SOS trigger. Watch the global alert banner display, the map focus on medical teams, and the safe exit routes compute.
+10. **Log Out**: Securely sign out.
+
+---
+
+## 🖥️ UI Pages Detail
+
+### 1. Landing Page
+* Renders a premium, futuristic hero banner with deep space styling.
+* Displays live metric tickers: **82.5K Fans**, **4.8m Queue Wait**, **<1.2s API Latency**, and **100% ADA Compliance**.
+
+### 2. Smart Dashboard
+* Real-time match scoring component (USA vs. Mexico).
+* Congestion warning cards.
+* Meteorological data showing canopy position (OPEN/CLOSED) and precipitation chance.
+* Stadium Ingress Area Chart displaying the accumulation rate of fans over time.
+
+### 3. AI Assistant
+* Full-height conversation panel featuring custom avatar bubbles.
+* **Suggested FAQs Selector**: Dropdown showing the 50 FAQs. Clicking a question automatically fires a request.
+* **Voice Synthesis Toggles**: Allows fans to listen to the AI's response via voice output.
+
+### 4. Interactive Map
+* Embedded Leaflet map centered on MetLife Stadium coordinates.
+* Category filtering pills at the top.
+* Interactive routing sidebar display showing calculated route travel times.
+
+### 5. Command Center
+* 2x2 grid of simulated black security feeds overlaying bounding boxes around targets.
+* Incident dispatch logs with dispatcher dispatch controls (e.g. `Dispatch Team`, `Confirm On-Scene`, `Mark Resolved`).
+
+### 6. Admin Panel
+* Manual match score editors.
+* System state controls for triggering simulated emergency drills.
+* Heartbeat speed configuration slider (controls IoT sensor interval).
+
+### 7. Sustainability Dashboard
+* Eco points summary widget.
+* Bar charts mapping recycled vs. general trash tons over matches.
+* Challenge claim cards.
+
+---
+
+## 🤖 AI Engineering Deep-Dive
+
+### Live Gemini Integration
+StadiumMind AI utilizes the `@google/generative-ai` package to initialize the model client:
+```typescript
 import { GoogleGenerativeAI } from '@google/generative-ai';
 const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-Action Parsing
-The system prompt teaches the AI model to output specialized command triggers at the end of its response: "To find the medical center, go to Gate D. [ACTION_ROUTE: med-west, standard]" The React app parses these codes using regex filters:
+```
 
-typescript
-
-
-const routeMatch = responseText.match(/$ACTION_ROUTE:\s*([\w-]+)\s*,\s*(\w+)$/);
+### Action Parsing
+The system prompt teaches the AI model to output specialized command triggers at the end of its response:
+`"To find the medical center, go to Gate D. [ACTION_ROUTE: med-west, standard]"`
+The React app parses these codes using regex filters:
+```typescript
+const routeMatch = responseText.match(/\[ACTION_ROUTE:\s*([\w-]+)\s*,\s*(\w+)\]/);
 if (routeMatch) {
   // Triggers map calculation dynamically
 }
-Smart Offline Fallback
+```
+
+### Smart Offline Fallback
 To ensure a robust user experience, the helper automatically switches to a keyword-matching lookup engine if the API key is not configured, matching questions to pre-defined answers in all 5 languages, and supporting open-ended topics with conversational general fallbacks:
-
-typescript
-
-
+```typescript
 const generalResponses = {
   en: `Regarding "${query}", that is an interesting topic! As an AI assistant, I can help you with anything...`
 };
-🔒 Security & Role Clearance
+```
+
+---
+
+## 🔒 Security & Role Clearance
+
 StadiumMind AI enforces strict client-side and database-level security protocols:
 
-Firestore Security Rules
-javascript
-
-
+### Firestore Security Rules
+```javascript
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
@@ -261,177 +326,219 @@ service cloud.firestore {
     }
   }
 }
-Role-Based Access Controls (RBAC)
+```
+
+### Role-Based Access Controls (RBAC)
 User roles are mapped via Context API and gate page access:
+* **Fan**: Access to Dashboard, Map, AI Assistant, and Sustainability.
+* **Staff**: Access to all Fan views + CCTV CommandCenter to dispatch paramedics.
+* **Admin**: Unrestricted access + Admin Override Panel.
 
-Fan: Access to Dashboard, Map, AI Assistant, and Sustainability.
-Staff: Access to all Fan views + CCTV CommandCenter to dispatch paramedics.
-Admin: Unrestricted access + Admin Override Panel.
-🚀 Installation & Setup Guide
-Prerequisites
-Node.js (v18 or higher)
-NPM or Yarn
-1. Clone the Repository
-bash
+---
 
+## 🚀 Installation & Setup Guide
 
+### Prerequisites
+* [Node.js](https://nodejs.org/) (v18 or higher)
+* [NPM](https://www.npmjs.com/) or [Yarn](https://yarnpkg.com/)
+
+### 1. Clone the Repository
+```bash
 git clone https://github.com/AnishCodes-99/fifastadium-ai.git
 cd fifastadium-ai
-2. Install Dependencies
-bash
+```
 
-
+### 2. Install Dependencies
+```bash
 npm install --no-audit --no-fund --prefer-offline
-3. Setup Environment Variables
-Create a .env file in the root directory:
+```
 
-bash
-
-
+### 3. Setup Environment Variables
+Create a `.env` file in the root directory:
+```bash
 copy .env.example .env
+```
 Fill in your Google Gemini API key:
-
-env
-
-
+```env
 VITE_GEMINI_API_KEY=your_gemini_api_key_here
-4. Run Development Server
-bash
+```
 
-
+### 4. Run Development Server
+```bash
 npm run dev
-Open http://localhost:3001 in your browser.
+```
+Open **`http://localhost:3001`** in your browser.
 
-5. Build for Production
-bash
-
-
+### 5. Build for Production
+```bash
 npm run build
-Vite will compile the code to the /dist directory.
+```
+Vite will compile the code to the `/dist` directory.
 
-6. Preview the Build
-bash
-
-
+### 6. Preview the Build
+```bash
 npm run preview
-⚙️ Environment Variables
-Variable	Description	Default Value	Required
-VITE_GEMINI_API_KEY	Google Generative AI API Key	(None)	Yes (for AI features)
-VITE_FIREBASE_API_KEY	Firebase API Client Key	(None)	Optional (Bypasses to offline)
-VITE_FIREBASE_PROJECT_ID	Firebase Project Identifier	(None)	Optional (Bypasses to offline)
-📦 Deployment
-Firebase Hosting
-Install the Firebase CLI:
-bash
+```
 
+---
 
-npm install -g firebase-tools
-Log in and initialize the project:
-bash
+## ⚙️ Environment Variables
 
+| Variable | Description | Default Value | Required |
+| :--- | :--- | :--- | :--- |
+| `VITE_GEMINI_API_KEY` | Google Generative AI API Key | *(None)* | Yes (for AI features) |
+| `VITE_FIREBASE_API_KEY` | Firebase API Client Key | *(None)* | Optional (Bypasses to offline) |
+| `VITE_FIREBASE_PROJECT_ID` | Firebase Project Identifier | *(None)* | Optional (Bypasses to offline) |
 
-firebase login
-Deploy the build directory:
-bash
+---
 
+## 📦 Deployment
 
-firebase deploy
-🌙 Offline Mode & Mock Telemetry
-If no Firebase credentials are found, StadiumMind AI boots into Offline Mock Mode:
+### Firebase Hosting
+1. Install the Firebase CLI:
+   ```bash
+   npm install -g firebase-tools
+   ```
+2. Log in and initialize the project:
+   ```bash
+   firebase login
+   ```
+3. Deploy the build directory:
+   ```bash
+   firebase deploy
+   ```
 
-Local Storage Persistence: Persists user profiles and sustainability points inside the browser.
-Mock Heartbeat Ticker: The context fires background tickers that periodically update gate wait-times, simulate medical alerts, and add logs to the Command Center dashboard.
-OpenStreetMap Sandbox: Maps load via public CDNs.
-⚡ Performance Optimizations
-Dynamic Code Splitting: Charts and Maps (Leaflet/Recharts) are heavy modules. They are loaded dynamically using React's Code Splitting to optimize first-contentful-paint (FCP).
-WebGL Rendering: Leaflet uses canvas markers, avoiding DOM bloat when rendering 100+ coordinates.
-Framer Motion Layout Isolation: Animations use transform instead of layout changes (such as width/height), preventing page reflows.
-Memoized Calculations: Route metrics are memoized to avoid recalculating coordinate lists during renders.
-♿ Accessibility Standard (ADA Compliance)
-Semantic HTML: Form inputs include associated labels, and SVGs include descriptive titles.
-ARIA Attributes: Dropdowns and tabs feature aria-expanded and role assignments.
-Color Contrast: Main color tokens exceed WCAG AA contrast standards.
-Accessible Shuttles: Navigation routes calculate step-free paths, prioritizing wheelchair lifts and avoiding staircases.
-♻️ Sustainability & Carbon Offsets
-Solar Telemetry: Shows active solar yield offsets.
-Eco-Points Challenge System: Rewards fans for taking green transit (e.g. Meadowlands Rail) or dropping plastic bottles into vending machines.
-Points Redemption: Earned points can be exchanged for concession vouchers, reducing paper printouts.
-🔮 Future Scope
-Direct IoT Hardware Integrations: Connect real Bluetooth beacons to track gate queues.
-Computer Vision CCTV Feeds: Hook actual RTSP security streams into threat detection modules.
-Augmented Reality (AR) HUD: Guide fans inside the stadium via AR paths on their cameras.
-Predictive Crowding AI: Train models to predict crowd congestion 30 minutes in advance.
-3D Digital Twin: Build a complete 3D WebGL model of MetLife Stadium.
-Smart Parking Ticket Scanner: Validate QR codes and assign closest parking bays.
-Wearable IoT Device Sync: Connect smart wristbands for location tracking.
-Drone Security Monitoring: Coordinate security drones to locate distress beacons.
-Automated Fire Sprinkler Toggles: Trigger sprinklers directly from the CommandCenter.
-Biometric Face-ID Gate Entry: Facilitate rapid entry via face scanners.
-Direct Food Pre-Ordering: Let fans order food directly from map concession stands.
-Acoustic Noise Tickers: Monitor sensor decibel levels to alert security of crowd unrest.
-5G Ultra-Wideband Routing: Deploy Edge AI microservices over high-speed networks.
-In-Seat Delivery Coordinates: Calculate routes for concessions staff to deliver food to seats.
-Sensory Friendly Space Mappers: Guide neurodivergent fans to quiet zones.
-Dynamic Ticket Reselling: Sync seat maps with official resellers.
-Automated Parking Shuttle Dispatch: Adjust shuttle frequencies based on parking lot arrivals.
-Telemetry-Driven Light Dimmers: Dim stadium lights depending on daylight levels.
-Smart Rainwater Catchment Monitors: Track rainwater reserve levels.
-Self-Healing Firestore Sync: Re-sync offline edits once connectivity is restored.
-NFC-Enabled Access Badging: Allow fans to unlock gates using their phone's NFC chips.
-Interactive Trivia Quizzes: Engage waiting fans with World Cup trivia.
-Intelligent Weather Predictions: Predict sudden weather changes and close canopy roofs.
-Multi-Agent Simulation: Model fan evacuations to optimize exit designs.
-Decentralized Carbon Offsets: Record sustainability points on a ledger.
-🧩 Challenges & Solutions
-1. Leaflet Container CSS Height Glitch
-Challenge: Leaflet maps would render as 0px height or collapse if the container was inside hidden flex tabs.
-Solution: Implemented a map resizing observer hook and wrapped Leaflet in a custom wrapper component that recalculates the viewport on tab changes.
-2. Rollup ESM Path Resolution Error
-Challenge: Rollup failed to build framer-motion package scripts due to a bug in version 11's ESM imports on Windows.
-Solution: Downgraded to version 10.16.4, which uses a stable module system that compiles cleanly.
-3. Firestore Heartbeat Throttling
-Challenge: Telemetry updates from mock IoT nodes caused high write costs when syncing to Firestore.
-Solution: Added a telemetry heartbeat frequency range slider in the Admin Panel to control state updates.
-🎓 Learning Outcomes
+---
+
+## 🌙 Offline Mode & Mock Telemetry
+
+If no Firebase credentials are found, StadiumMind AI boots into **Offline Mock Mode**:
+* **Local Storage Persistence**: Persists user profiles and sustainability points inside the browser.
+* **Mock Heartbeat Ticker**: The context fires background tickers that periodically update gate wait-times, simulate medical alerts, and add logs to the Command Center dashboard.
+* **OpenStreetMap Sandbox**: Maps load via public CDNs.
+
+---
+
+## ⚡ Performance Optimizations
+
+1. **Dynamic Code Splitting**: Charts and Maps (Leaflet/Recharts) are heavy modules. They are loaded dynamically using React's Code Splitting to optimize first-contentful-paint (FCP).
+2. **WebGL Rendering**: Leaflet uses canvas markers, avoiding DOM bloat when rendering 100+ coordinates.
+3. **Framer Motion Layout Isolation**: Animations use `transform` instead of layout changes (such as width/height), preventing page reflows.
+4. **Memoized Calculations**: Route metrics are memoized to avoid recalculating coordinate lists during renders.
+
+---
+
+## ♿ Accessibility Standard (ADA Compliance)
+
+* **Semantic HTML**: Form inputs include associated labels, and SVGs include descriptive titles.
+* **ARIA Attributes**: Dropdowns and tabs feature `aria-expanded` and role assignments.
+* **Color Contrast**: Main color tokens exceed WCAG AA contrast standards.
+* **Accessible Shuttles**: Navigation routes calculate step-free paths, prioritizing wheelchair lifts and avoiding staircases.
+
+---
+
+## ♻️ Sustainability & Carbon Offsets
+
+* **Solar Telemetry**: Shows active solar yield offsets.
+* **Eco-Points Challenge System**: Rewards fans for taking green transit (e.g. Meadowlands Rail) or dropping plastic bottles into vending machines.
+* **Points Redemption**: Earned points can be exchanged for concession vouchers, reducing paper printouts.
+
+---
+
+## 🔮 Future Scope
+
+1. **Direct IoT Hardware Integrations**: Connect real Bluetooth beacons to track gate queues.
+2. **Computer Vision CCTV Feeds**: Hook actual RTSP security streams into threat detection modules.
+3. **Augmented Reality (AR) HUD**: Guide fans inside the stadium via AR paths on their cameras.
+4. **Predictive Crowding AI**: Train models to predict crowd congestion 30 minutes in advance.
+5. **3D Digital Twin**: Build a complete 3D WebGL model of MetLife Stadium.
+6. **Smart Parking Ticket Scanner**: Validate QR codes and assign closest parking bays.
+7. **Wearable IoT Device Sync**: Connect smart wristbands for location tracking.
+8. **Drone Security Monitoring**: Coordinate security drones to locate distress beacons.
+9. **Automated Fire Sprinkler Toggles**: Trigger sprinklers directly from the CommandCenter.
+10. **Biometric Face-ID Gate Entry**: Facilitate rapid entry via face scanners.
+11. **Direct Food Pre-Ordering**: Let fans order food directly from map concession stands.
+12. **Acoustic Noise Tickers**: Monitor sensor decibel levels to alert security of crowd unrest.
+13. **5G Ultra-Wideband Routing**: Deploy Edge AI microservices over high-speed networks.
+14. **In-Seat Delivery Coordinates**: Calculate routes for concessions staff to deliver food to seats.
+15. **Sensory Friendly Space Mappers**: Guide neurodivergent fans to quiet zones.
+16. **Dynamic Ticket Reselling**: Sync seat maps with official resellers.
+17. **Automated Parking Shuttle Dispatch**: Adjust shuttle frequencies based on parking lot arrivals.
+18. **Telemetry-Driven Light Dimmers**: Dim stadium lights depending on daylight levels.
+19. **Smart Rainwater Catchment Monitors**: Track rainwater reserve levels.
+20. **Self-Healing Firestore Sync**: Re-sync offline edits once connectivity is restored.
+21. **NFC-Enabled Access Badging**: Allow fans to unlock gates using their phone's NFC chips.
+22. **Interactive Trivia Quizzes**: Engage waiting fans with World Cup trivia.
+23. **Intelligent Weather Predictions**: Predict sudden weather changes and close canopy roofs.
+24. **Multi-Agent Simulation**: Model fan evacuations to optimize exit designs.
+25. **Decentralized Carbon Offsets**: Record sustainability points on a ledger.
+
+---
+
+## 🧩 Challenges & Solutions
+
+### 1. Leaflet Container CSS Height Glitch
+* **Challenge**: Leaflet maps would render as 0px height or collapse if the container was inside hidden flex tabs.
+* **Solution**: Implemented a map resizing observer hook and wrapped Leaflet in a custom wrapper component that recalculates the viewport on tab changes.
+
+### 2. Rollup ESM Path Resolution Error
+* **Challenge**: Rollup failed to build `framer-motion` package scripts due to a bug in version 11's ESM imports on Windows.
+* **Solution**: Downgraded to version `10.16.4`, which uses a stable module system that compiles cleanly.
+
+### 3. Firestore Heartbeat Throttling
+* **Challenge**: Telemetry updates from mock IoT nodes caused high write costs when syncing to Firestore.
+* **Solution**: Added a telemetry heartbeat frequency range slider in the Admin Panel to control state updates.
+
+---
+
+## 🎓 Learning Outcomes
+
 Building StadiumMind AI provided deep insights into:
+* **Generative AI Orchestration**: Feeding context prompts to LLMs to generate text answers and action codes.
+* **Geographical Vector Calculators**: Custom calculations to plot accessible routes.
+* **Real-Time Data Tickers**: State synchronization across multiple devices.
+* **Glassmorphism Design Systems**: Building premium dark interfaces with Tailwind CSS.
 
-Generative AI Orchestration: Feeding context prompts to LLMs to generate text answers and action codes.
-Geographical Vector Calculators: Custom calculations to plot accessible routes.
-Real-Time Data Tickers: State synchronization across multiple devices.
-Glassmorphism Design Systems: Building premium dark interfaces with Tailwind CSS.
-🤝 Contributing
+---
+
+## 🤝 Contributing
+
 We welcome contributions to StadiumMind AI!
+1. Fork the Project.
+2. Create a Feature Branch (`git checkout -b feature/AmazingFeature`).
+3. Commit your Changes (`git commit -m 'Add AmazingFeature'`).
+4. Push to the Branch (`git push origin feature/AmazingFeature`).
+5. Open a Pull Request.
 
-Fork the Project.
-Create a Feature Branch (git checkout -b feature/AmazingFeature).
-Commit your Changes (git commit -m 'Add AmazingFeature').
-Push to the Branch (git push origin feature/AmazingFeature).
-Open a Pull Request.
-📄 License
-Distributed under the MIT License. See LICENSE for more information.
+---
 
-👤 Author
-Anish Sunil Wani
+## 📄 License
 
-Role: IT Engineering Student | AI Enthusiast |  Content Creator | Digital Marketer
-Social Channels:
-YouTube
-Instagram
-LinkedIn
-GitHub
-Email: 
-wanianish@gmail.com
-🙏 Acknowledgements
-React
-Firebase
-Google Gemini AI
-Leaflet.js
-Tailwind CSS
-Framer Motion
-Recharts
-Lucide Icons
-OpenStreetMap
-7:10 PM
+Distributed under the MIT License. See [LICENSE](https://github.com/AnishCodes-99/fifastadium-ai/blob/master/LICENSE) for more information.
 
+---
 
+## 👤 Author
 
+**Anish Sunil Wani**
+* **Role**: IT Engineering Student | AI Enthusiast | Full Stack Developer | Content Creator | Digital Marketer
+* **Social Channels**:
+  * [YouTube](https://www.youtube.com/@AnishWani_Ai)
+  * [Instagram](https://www.instagram.com/anish_inspires)
+  * [LinkedIn](https://www.linkedin.com/in/anish-wani-091071374)
+  * [GitHub](https://github.com/AnishCodes-99)
+* **Email**: anishwani.work@gmail.com
+
+---
+
+## 🙏 Acknowledgements
+
+* [React](https://reactjs.org/)
+* [Firebase](https://firebase.google.com/)
+* [Google Gemini AI](https://deepmind.google/technologies/gemini/)
+* [Leaflet.js](https://leafletjs.com/)
+* [Tailwind CSS](https://tailwindcss.com/)
+* [Framer Motion](https://www.framer.com/motion/)
+* [Recharts](https://recharts.org/)
+* [Lucide Icons](https://lucide.dev/)
+* [OpenStreetMap](https://www.openstreetmap.org/)
