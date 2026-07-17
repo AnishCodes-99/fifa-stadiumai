@@ -527,7 +527,7 @@ Distributed under the MIT License. See [LICENSE](https://github.com/AnishCodes-9
   * [Instagram](https://www.instagram.com/anish_inspires)
   * [LinkedIn](https://www.linkedin.com/in/anish-wani-091071374)
   * [GitHub](https://github.com/AnishCodes-99)
-* **Email**: anishwani.work@gmail.com
+* **Email**: wanianish88@gmail.com
 
 ---
 
