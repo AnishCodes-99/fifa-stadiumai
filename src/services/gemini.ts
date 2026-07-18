@@ -1,9 +1,10 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
-const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-const isGeminiConfigured = apiKey && apiKey !== 'YOUR_GEMINI_API_KEY_HERE';
+const rawApiKey = import.meta.env.VITE_GEMINI_API_KEY;
+const apiKey = typeof rawApiKey === 'string' ? rawApiKey.trim() : '';
+const isGeminiConfigured = apiKey !== '' && apiKey !== 'YOUR_GEMINI_API_KEY_HERE' && apiKey.length > 10;
 
-let genAI: any = null;
+let genAI: GoogleGenerativeAI | null = null;
 if (isGeminiConfigured) {
   try {
     genAI = new GoogleGenerativeAI(apiKey);
@@ -15,17 +16,14 @@ if (isGeminiConfigured) {
 export interface AIResponse {
   text: string;
   action?: {
-    type: 'route' | 'focus';
+    type: 'focus' | 'route';
     targetId: string;
     routeType?: 'standard' | 'wheelchair';
   };
 }
 
-
-
 // Local fallback with topic checking
 const generateFallbackResponse = (query: string, language: string = 'en'): AIResponse => {
-
   const q = query.toLowerCase();
   
   // Identify requested language
@@ -138,65 +136,65 @@ const generateFallbackResponse = (query: string, language: string = 'en'): AIRes
         action: { type: 'focus', targetId: 'gate-d' }
       },
       transit: {
-        text: "🚄 TRANSPORT: Meadowlands Rail Link part vers Penn Station toutes les 8 min. Navette Express 351 vers Port Authority toutes les 5 min.",
+        text: "🚄 TRANSPORT: La liaison ferroviaire Meadowlands part toutes les 8 minutes. La navette Express 351 circule toutes les 5 minutes. Les taxis ont une attente de 10 min.",
         action: { type: 'focus', targetId: 'park-2' }
       },
       sustainability: {
-        text: "♻️ DURABILITÉ: Déposez vos bouteilles en plastique dans la machine de recyclage du Food Court Nord pour obtenir 100 Eco-Points.",
+        text: "♻️ DURABILITÉ: Déposez vos bouteilles en plastique dans la machine RVM du Food Court Nord et gagnez 100 Éco-Points échangeables contre des remises.",
         action: { type: 'focus', targetId: 'food-north' }
       },
       food: {
-        text: "🍔 RESTAURATION: Food Court Nord (Burgers, Halal, Végan) a 8 min d'attente. Le Food Court Sud (Pizza) a 18 min d'attente.",
+        text: "🍔 RESTAURATION: Le Food Court Nord (burgers, végétalien) a une attente de 8 min. Le Sud (tacos, pizza) a une attente de 18 min.",
         action: { type: 'route', targetId: 'food-north', routeType: 'standard' }
       },
       match: {
-        text: "⚽ MATCH EN DIRECT: 64ème minute des quarts de finale. ÉTATS-UNIS 1 - 0 MEXIQUE. 82 500 supporters présents. Température de 24°C.",
+        text: "⚽ DIRECT MATCH: 64ème minute. É-U 1 x 0 MEXIQUE. Affluence: 82 500 spectateurs. Température: 24°C.",
         action: { type: 'focus', targetId: 'gate-a' }
       },
       general: {
-        text: "Bonjour! Je suis StadiumMind AI, votre assistant pour la Coupe du Monde de la FIFA 2026. Je suis là pour vous aider à vous déplacer, trouver les urgences, ou recycler."
+        text: "Bonjour! Je suis StadiumMind AI, votre assistant. Je peux vous aider avec les itinéraires, les portes de stade et le transport."
       }
     },
     de: {
       emergency: {
-        text: "🚨 NOTFALL-WARNUNG: Die Notausgänge sind auf der Karte rot markiert. Bitte suchen Sie sofort die Ausgänge Nord und Süd auf. Befolgen Sie die Anweisungen des Sicherheitsperonals.",
+        text: "🚨 NOTFALLALARM: Notausgänge sind auf der Karte rot markiert. Finden Sie sofort die Tore N und S. Folgen Sie den Anweisungen der Sicherheitskräfte.",
         action: { type: 'focus', targetId: 'exit-n' }
       },
       medical: {
-        text: "🏥 SANITÄTSSTATION: Die nächste Sanitätsstation ist Station West in der Nähe von Tor D. Die schnellste Route ist auf Ihrer Karte markiert.",
+        text: "🏥 SANITÄTSSTATION: Die nächste Sanitätsstation West befindet sich in der Nähe von Tor D. Der schnellste Weg ist auf der Karte markiert.",
         action: { type: 'route', targetId: 'med-west', routeType: 'standard' }
       },
       wheelchair: {
-        text: "♿ BARRIEREFREIHEIT: Das MetLife Stadium ist ADA-konform. Tor A verfügt über eine Rollstuhlrampe, Tor C über Fahrstühle. Ich habe eine stufenfreie Route berechnet.",
+        text: "♿ BARRIEREFREIHEIT: Das MetLife Stadium ist ADA-konform. Tor A verfügt über eine Rampe, Tor C über Aufzüge. Stufenlose Route auf der Karte angezeigt.",
         action: { type: 'route', targetId: 'gate-a', routeType: 'wheelchair' }
       },
       gates: {
-        text: "🎟️ WARTEZEITEN: Tor A: 5 min, Tor D: 4 min, Tor C: 10 min. Vermeiden Sie Tor B (VIP, 25 min). Nutzen Sie Tor D für schnellen Einlass.",
+        text: "🎟️ WARTEZEITEN AN TOREN: Tor A: 5 Min, Tor D: 4 Min, Tor C: 10 Min. Meiden Sie Tor B (VIP). Bitte gehen Sie zu Tor D.",
         action: { type: 'focus', targetId: 'gate-d' }
       },
       transit: {
-        text: "🚄 TRANSPORT: Der Meadowlands Rail Link fährt alle 8 Minuten. Die Shuttle-Express-Busse 351 fahren alle 5 Minuten. Rideshares haben eine Latenz von 10 Minuten.",
+        text: "🚄 VERKEHRSMITTEL: Der Meadowlands Rail Link fährt alle 8 Minuten. Der Express-Shuttle-Bus 351 fährt alle 5 Minuten. Rideshares haben 10 Min Wartezeit.",
         action: { type: 'focus', targetId: 'park-2' }
       },
       sustainability: {
-        text: "♻️ NACHHALTIGKEIT: Werfen Sie Pfandflaschen in den RVM-Automaten am Nord-Gastronomiebereich, um 100 Eco-Punkte zu sammeln.",
+        text: "♻️ NACHHALTIGKEIT: Werfen Sie Plastikflaschen in den RVM-Automaten bei Gastronomie Nord ein, um 100 Eco-Punkte für Rabatte zu erhalten.",
         action: { type: 'focus', targetId: 'food-north' }
       },
       food: {
-        text: "🍔 ESSEN & TRINKEN: Der Gastronomiebereich Nord (Burgers, Vegan, Halal) hat 8 Minuten Wartezeit. Gastronomiebereich Süd hat 18 Minuten Wartezeit.",
+        text: "🍔 ESSEN & TRINKEN: Gastronomie Nord hat 8 Minuten Wartezeit. Gastronomie Süd (Tacos, Pizza) hat 18 Minuten Wartezeit.",
         action: { type: 'route', targetId: 'food-north', routeType: 'standard' }
       },
       match: {
-        text: "⚽ LIVE-SPIEL: 64. Spielminute im Viertelfinale USA gegen Mexiko. USA führt 1:0. Zuschauerzahl: 82.500. Temperatur: 24°C.",
+        text: "⚽ LIVE-SPIEL: 64. Minute im Viertelfinale. USA führt 1 - 0 gegen Mexiko. Zuschauer: 82.500. Temperatur: 24°C.",
         action: { type: 'focus', targetId: 'gate-a' }
       },
       general: {
-        text: "Hallo! Ich bin StadiumMind AI, Ihr Assistent für die FIFA WM 2026. Ich kann Ihnen bei Wegbeschreibungen, Wartezeiten und Öko-Herausforderungen helfen."
+        text: "Hallo! Ich bin StadiumMind AI, Ihr Assistent. Ich kann Ihnen bei der Navigation, den Wartezeiten und den Notausgängen helfen."
       }
     },
     pt: {
       emergency: {
-        text: "🚨 ALERTA DE EMERGÊNCIA: As saídas de emergência estão destacadas em vermelho. Por favor, localize os Portões N e S imediatamente. Siga as instruções da equipe.",
+        text: "🚨 ALERTA DE EMERGÊNCIA: As saídas de emergência estão marcadas em vermelho. Por favor, localize os Portões de Saída N e S. Siga as instruções dos seguranças.",
         action: { type: 'focus', targetId: 'exit-n' }
       },
       medical: {
@@ -274,11 +272,19 @@ const generateFallbackResponse = (query: string, language: string = 'en'): AIRes
 };
 
 export const askGemini = async (query: string, language: string = 'en'): Promise<AIResponse> => {
+  const sanitizedQuery = typeof query === 'string' ? query.trim().slice(0, 1000) : '';
+  if (!sanitizedQuery) {
+    return {
+      text: language === 'es' 
+        ? "Por favor, ingresa una pregunta válida." 
+        : "Please enter a valid question."
+    };
+  }
 
   if (!isGeminiConfigured || !genAI) {
     return new Promise((resolve) => {
       setTimeout(() => {
-        resolve(generateFallbackResponse(query, language));
+        resolve(generateFallbackResponse(sanitizedQuery, language));
       }, 600);
     });
   }
@@ -311,7 +317,7 @@ export const askGemini = async (query: string, language: string = 'en'): Promise
     
     Route types are "standard" or "wheelchair".`;
 
-    const result = await model.generateContent([systemPrompt, query]);
+    const result = await model.generateContent([systemPrompt, sanitizedQuery]);
     const responseText = await result.response.text();
     
     let action: AIResponse['action'] = undefined;
@@ -342,6 +348,6 @@ export const askGemini = async (query: string, language: string = 'en'): Promise
     };
   } catch (error) {
     console.error("Gemini AI API Call failed, returning smart fallback:", error);
-    return generateFallbackResponse(query, language);
+    return generateFallbackResponse(sanitizedQuery, language);
   }
 };
