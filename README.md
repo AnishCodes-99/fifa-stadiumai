@@ -542,3 +542,56 @@ Distributed under the MIT License. See [LICENSE](https://github.com/AnishCodes-9
 * [Recharts](https://recharts.org/)
 * [Lucide Icons](https://lucide.dev/)
 * [OpenStreetMap](https://www.openstreetmap.org/)
+
+
+## 🧪 Testing Suite & Quality Assurance
+
+To maximize code reliability, prevent regressions, and ensure premium QA standards, StadiumMind AI features a complete, custom-mocked unit and integration testing suite. The suite executes offline in a sandboxed DOM environment, bypassing network dependencies.
+
+### 🛠️ Test Stack Configuration
+* **Runner & Framework**: [Vitest](https://vitest.dev/) (Vite-native testing framework)
+* **DOM Environment**: `jsdom` (Simulating browser window/document behavior)
+* **Assertions & Rendering**: `@testing-library/react` & `@testing-library/jest-dom`
+
+---
+
+### 📦 Implemented Mocks & Sandbox Stubs (`setup.tsx` / `firebaseMock.ts`)
+To prevent test timeouts and execution failures due to missing browser APIs, the setup file implements these custom mocks:
+* **Firebase SDK Resolver**: Redirects imports of `firebase/app`, `firebase/auth`, `firebase/firestore`, `firebase/storage`, and `firebase/functions` to a local stub file, bypassing external database hits.
+* **Framer Motion Observer**: Mocks browser `IntersectionObserver` to support exit/entry scroll animations without node reference errors in Node.js.
+* **HTML Element Layout API**: Mocks `Element.prototype.scrollIntoView` which is used in the AI chat stream to automatically focus on new messages.
+* **Speech Synthesis SDK**: Stubs `window.speechSynthesis` and `SpeechSynthesisUtterance` to test audio guide triggering buttons.
+* **Recharts Responsive Container**: Intercepts charts and immediately renders widgets at a mock size of `800x600px` to bypass parent layout checks in JSDOM.
+* **Leaflet Maps wrapper**: Substitutes dynamic WebGL maps with container `div` placeholders (`mock-map-container`, `mock-polyline`, etc.) allowing component validation without loading Leaflet layout vectors.
+
+---
+
+### 🔍 Detailed Test Cases (17 Tests Configured)
+
+#### 1. Context Providers (`src/test/Contexts.test.tsx`)
+* **`LanguageContext`**: Verifies dynamic translation lookup and ensures full-screen language toggle propagates to Spanish, French, German, and Portuguese dictionaries.
+* **`AuthContext`**: Tests login flow bypass triggers for Fan, Staff, and Admin roles and verifies user profile initialization.
+* **`RouterContext`**: Asserts path updates and browser hash history changes when navigating dashboards.
+* **`StadiumStateContext`**: Validates match score increments, evacuation broadcast triggers, and live alarm logging.
+
+#### 2. Core UI Components (`src/test/Components.test.tsx`)
+* **`LandingPage`**: Verifies animated hero headers, call-to-actions, and main entry metrics.
+* **`SmartDashboard`**: Validates telemetry widgets, meteorological stats, and ingress occupancy curves.
+* **`AIAssistant`**: Asserts dynamic chatbot FAQ guide selection dropdown updates, and verifies simulated message dispatch.
+* **`StadiumMap`**: Confirms responsive Leaflet container rendering and focal target indicators.
+* **`CommandCenter`**: Validates surveillance feed grids, simulated threat logs, and paramedic dispatch handlers.
+* **`SustainabilityDashboard`**: Checks carbon offset widgets, solar yield curves, and claims eco score rewards.
+* **`AdminPanel`**: Asserts manual score overrides and emergency drill toggles.
+* **`Layout & Sidebar`**: Validates developer contact badge, social links redirects (YouTube, Instagram, LinkedIn, GitHub), and sidebar menu clearances.
+
+#### 3. Utilities & AI Services (`src/test/Utilities.test.ts`)
+* **AI Fallback Queries**: Evaluates offline AI text replies, location routing coordinates `[ACTION_ROUTE: med-west, standard]`, and ADA wheelchair coordinates mapping.
+* **FAQ Dictionary Data Structure**: Enforces that the localization database holds exactly **50 distinct FAQs**, structured with localized language key-value pairs (`en`, `es`, `fr`, `de`, `pt`).
+
+---
+
+### 🚀 Running the Test Suite Locally
+
+1. **Install Dependencies**:
+   ```bash
+   npm install
