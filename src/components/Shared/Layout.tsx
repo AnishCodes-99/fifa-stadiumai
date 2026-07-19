@@ -144,7 +144,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
             <Globe size={13} className="text-gray-400" />
             <select
               value={language}
-              onChange={(e) => setLanguage(e.target.value as any)}
+              onChange={(e) => setLanguage(e.target.value as 'en' | 'es' | 'fr' | 'de' | 'pt')}
               className="bg-transparent border-none text-[11px] font-bold focus:outline-none text-gray-300 cursor-pointer pr-1"
             >
               <option value="en" className="bg-darkBg">English</option>

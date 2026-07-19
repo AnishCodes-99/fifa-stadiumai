@@ -19,14 +19,15 @@ export const LoginPage: React.FC = () => {
     setError('');
     setLoading(true);
 
-    try {
+        try {
       if (isRegister) {
         await register(email, password, name);
       } else {
         await login(email, password);
       }
-    } catch (err: any) {
-      setError(err.message || 'Authentication failed. Please verify credentials.');
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Authentication failed. Please verify credentials.';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

@@ -41,17 +41,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       return;
     }
 
-    const unsubscribe = onAuthStateChanged(auth, (fbUser: any) => {
-      if (fbUser) {
-        const role = fbUser.email?.includes('admin') ? 'admin' : 
-                     fbUser.email?.includes('staff') ? 'staff' : 'fan';
+    const unsubscribe = onAuthStateChanged(auth!, (fbUser: unknown) => {
+      const u = fbUser as {
+        uid: string;
+        email: string | null;
+        displayName: string | null;
+        photoURL: string | null;
+      } | null;
+
+      if (u) {
+        const role = u.email?.includes('admin') ? 'admin' : 
+                     u.email?.includes('staff') ? 'staff' : 'fan';
         
         setUser({
-          uid: fbUser.uid,
-          email: fbUser.email || '',
-          displayName: fbUser.displayName || 'World Cup Fan',
+          uid: u.uid,
+          email: u.email || '',
+          displayName: u.displayName || 'World Cup Fan',
           role: role,
-          photoURL: fbUser.photoURL || undefined
+          photoURL: u.photoURL || undefined
         });
       } else {
         setUser(null);
@@ -66,7 +73,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setLoading(true);
     try {
       if (firebaseEnabled) {
-        await signInWithEmailAndPassword(auth, email, password);
+        await signInWithEmailAndPassword(auth!, email, password);
       } else {
         const role = email.includes('admin') ? 'admin' : 
                      email.includes('staff') ? 'staff' : 'fan';
@@ -88,7 +95,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setLoading(true);
     try {
       if (firebaseEnabled) {
-        await createUserWithEmailAndPassword(auth, email, password);
+        await createUserWithEmailAndPassword(auth!, email, password);
       } else {
         const mockUser: UserProfile = {
           uid: `mock-${Date.now()}`,
@@ -108,7 +115,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setLoading(true);
     try {
       if (firebaseEnabled) {
-        await firebaseSignOut(auth);
+        await firebaseSignOut(auth!);
       } else {
         setUser(null);
         localStorage.removeItem('stadiummind_user');

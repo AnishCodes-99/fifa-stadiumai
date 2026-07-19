@@ -310,7 +310,7 @@ export const CommandCenter: React.FC = () => {
                 <label className="text-[10px] font-bold text-gray-500 uppercase block mb-1">{t('cc_alarm_severity')}</label>
                 <select
                   value={newIncidentSeverity}
-                  onChange={(e) => setNewIncidentSeverity(e.target.value as any)}
+                  onChange={(e) => setNewIncidentSeverity(e.target.value as 'low' | 'medium' | 'high' | 'critical')}
                   className="w-full bg-darkBg border border-white/10 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-primary/50 text-gray-300"
                 >
                   <option value="low">Low (Info)</option>

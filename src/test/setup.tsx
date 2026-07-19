@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom';
 import { vi } from 'vitest';
+import { ReactNode } from 'react';
 
 // Mock Firebase Modules
 vi.mock('firebase/app', () => ({
@@ -80,10 +81,10 @@ Element.prototype.scrollIntoView = vi.fn();
 
 // Mock Recharts ResponsiveContainer to render immediately in jsdom
 vi.mock('recharts', async (importOriginal) => {
-  const original = await importOriginal<any>();
+  const original = await importOriginal<Record<string, unknown>>();
   return {
     ...original,
-    ResponsiveContainer: ({ children }: any) => {
+    ResponsiveContainer: ({ children }: { children: ReactNode | ((props: { width: number; height: number }) => ReactNode) }) => {
       if (typeof children === 'function') {
         return children({ width: 800, height: 600 });
       }
@@ -94,24 +95,16 @@ vi.mock('recharts', async (importOriginal) => {
 
 // Mock React-Leaflet to avoid Leaflet rendering layout issues in jsdom
 vi.mock('react-leaflet', () => ({
-  MapContainer: ({ children }: any) => <div data-testid="mock-map-container">{children}</div>,
+  MapContainer: ({ children }: { children: ReactNode }) => <div data-testid="mock-map-container">{children}</div>,
   TileLayer: () => <div data-testid="mock-tile-layer" />,
-  Marker: ({ children, position }: any) => (
+  Marker: ({ children, position }: { children?: ReactNode; position: [number, number] }) => (
     <div data-testid="mock-marker" data-position={JSON.stringify(position)}>
       {children}
     </div>
   ),
-  Popup: ({ children }: any) => <div data-testid="mock-popup">{children}</div>,
-  Polyline: ({ positions }: any) => <div data-testid="mock-polyline" data-positions={JSON.stringify(positions)} />,
+  Popup: ({ children }: { children: ReactNode }) => <div data-testid="mock-popup">{children}</div>,
+  Polyline: ({ positions }: { positions: [number, number][] }) => <div data-testid="mock-polyline" data-positions={JSON.stringify(positions)} />,
   useMap: () => ({
     setView: vi.fn(),
   }),
-}));
-
-// Mock Leaflet L object
-vi.mock('leaflet', () => ({
-  default: {
-    divIcon: vi.fn().mockReturnValue({}),
-  },
-  divIcon: vi.fn().mockReturnValue({}),
 }));

@@ -1,4 +1,3 @@
-[README.md](https://github.com/user-attachments/files/30127054/README.md)
 # ⚽ StadiumMind AI
 
 ### **AI-Powered Smart Stadium Intelligence Platform for the FIFA World Cup 2026**
@@ -15,17 +14,43 @@
 
 ## 📖 Executive Summary & About the Project
 
-**StadiumMind AI** is an enterprise-grade, hackathon-winning Smart Stadium Intelligence Platform designed specifically for the **FIFA World Cup 2026** at MetLife Stadium (New York/New Jersey).
+**StadiumMind AI** is an enterprise-grade, smart stadium orchestration console designed specifically for the **FIFA World Cup 2026** hosted at MetLife Stadium (New York/New Jersey).
 
-Managing stadium logistics during global sporting events presents monumental challenges, including massive crowd sizes, accessibility issues, language barriers, public transit delays, and emergency response times. StadiumMind AI bridges the gap between stadium operations and fan experience by integrating **Google Gemini AI**, interactive **Leaflet mapping**, and **real-time IoT telemetry** into a unified, responsive dashboard wrapped in a premium dark glassmorphism user interface.
+Managing logistics during massive global sporting events with 80,000+ attendees presents monumental challenges: severe crowd congestion, navigation delays, emergency dispatch latencies, language barriers, and accessibility issues. StadiumMind AI bridges the gap between stadium operations and fan experience by integrating **Google Gemini AI**, interactive **Leaflet mapping**, and **real-time simulated IoT telemetry** into a unified, responsive console styled with a premium dark glassmorphism user interface.
 
-Whether you are a fan navigating concessions, a medic responding to an SOS alert, or an administrator overriding gate locks, StadiumMind AI provides instantaneous, localized intelligence to ensure safety, efficiency, and sustainability.
+Whether a spectator is querying concessions wait-times in their native language, a security operator is tracking threats via CCTV computer vision bounding boxes, or a medic is responding to a real-time SOS distress beacon, StadiumMind AI provides instantaneous, location-aware intelligence.
+
+---
+
+## 🎯 Competition Evaluation Requirements
+
+> [!IMPORTANT]
+> This section explicitly documents alignment with the Hack2Skill × Google Build with AI evaluation parameters.
+
+### Chosen Vertical
+StadiumMind AI operates in the **Smart Infrastructure, Sports Venue Orchestration, and Event Fan Experience** vertical. It targets high-capacity tournament venues (using the FIFA 2026 configuration at MetLife Stadium as the operational template) to synchronize crowd ingress, emergency dispatch, accessibility routing (ADA), and carbon-offset tracking into a single digital twin platform.
+
+### Approach and Logic
+Our engineering model is built on a **Modular Micro-Interface Architecture** separating spectator utilities from administrative security tools, tied together by a reactive state model:
+* **Reactive Context Layer**: Global states for user identity, translations, dynamic routing, and sensor streams are managed using React Context API (`AuthContext`, `LanguageContext`, `RouterContext`, `StadiumStateContext`).
+* **GenAI Action Tag Parsing**: The natural language chat interface routes queries to the **Google Gemini 1.5 Flash API**. By feeding structured instructions in the system prompt, the AI automatically appends geolocation commands (e.g. `[ACTION_ROUTE: med-west, standard]`) to its text responses. The React frontend parses these tags in real-time to compute path coordinates and render navigation polylines.
+* **Offline Resiliency (Network Independence)**: Recognizing that stadium networks suffer bandwidth drops, we designed an offline mock fallback engine. If Firebase configs or Gemini API keys are missing, the client seamlessly boots using localized keyword dictionaries and local storage persistence.
+
+### How the Solution Works
+1. **Fan Journey**: Spectators toggle languages (5 options), ask the AI assistant questions (via text or voice synthesis guides), search the Leaflet map for facilities, select standard or step-free ADA paths, and log eco-challenges to earn merchandise points.
+2. **Security Command Center**: Cleared staff monitor automated canvas CCTV surveillance feeds, view live incident logs, toggle IoT gate locks, and dispatch medical responders.
+3. **Emergency Broadcast Loop**: Pressing the SOS distress button transmits the user's coordinates to the Command Center, logs the incident, and broadcasts a flashing evacuation banner across all active sessions, rendering routes to the nearest exits.
+
+### Any Assumptions Made
+* **Coordinate Maps**: Layout distances, landmark nodes, and ADA routes are modeled based on public MetLife Stadium concession layouts.
+* **Telemetry Tickers**: Crowd densities and gate wait-times are driven by mock telemetry heartbeat intervals controlled via the Admin Panel to simulate IoT sensors without database cost overheads.
+* **Network Latency**: Fallbacks assume localized client-side keyword matching is preferable to blank errors when 5G connectivity is congested inside the stadium concourse.
 
 ---
 
 ## 🌟 Project Vision
 
-The vision of StadiumMind AI is to establish a new global standard for sports venue orchestration. By leveraging context-aware artificial intelligence, edge-computed maps, and real-time data streaming, the platform aims to:
+By leveraging context-aware artificial intelligence, edge-computed maps, and real-time data streaming, the platform aims to:
 * **Elevate Fan Experience**: Dispel stadium friction by providing real-time food queue telemetry, step-free navigation, and instant multilingual assistance.
 * **Streamline Venue Security**: Empower rapid-response units with computer vision threat overlays, live logs, and active incident mapping.
 * **Drive Global Sustainability**: Engage fans in reducing event carbon footprints through gamified public transit incentives and interactive waste recycling.
@@ -56,7 +81,7 @@ StadiumMind AI resolves these challenges through a modular, intelligent architec
 | **Concourse Navigation** | Dynamic Navigation & Focal Point Tracking | OpenStreetMap API + Leaflet.js |
 | **Emergency Incidents** | SOS Distress Beacon & CommandCenter Dispatch | Real-time Firestore sync & dispatch handlers |
 | **Accessibility Barriers** | ADA Step-Free Routing Option | Custom Coordinate Route Generators |
-| **Transit Confusion** | Departure Transit Guide & Occupancy Tracker | Real-time train/shuttle occupancy tickers |
+| **Transit Confusion** | Departure Transit Guide & Ticker | Real-time train/shuttle occupancy tickers |
 | **Language Barriers** | Dynamic Full-Screen Locale Translators | LanguageProvider Context Engine |
 | **Waste & Carbon Draw** | Eco Challenges, Solar Yields, & Points System | Recharts graphs + Gamification hooks |
 | **General Questions** | Open-Ended Google Gemini Assistant | Google Generative AI API (Gemini 1.5 Flash) |
@@ -141,41 +166,6 @@ graph TD
   Layout --> AI[Gemini AI Assistant]
   Layout --> CommandCenter[Command Center]
   Layout --> Sustainability[Sustainability Panel]
-  Layout --> Admin[Admin Override Panel]
-```
-
-### 3. Real-Time Emergency Flow
-```mermaid
-graph TD
-  FanSOS[Fan presses SOS] -->|Write Event| Firestore[(Cloud Firestore)]
-  Firestore -->|Real-time Sync| Dispatcher[Command Center Alarm Board]
-  Dispatcher -->|Deploy Responder| Medic[Paramedic Team dispatched]
-  FanSOS -->|Broadcase Alert| Banner[Evacuation Banner displayed to all users]
-  Banner -->|Draw Path| Route[ADA Step-Free Route calculated to nearest Gate]
-```
-
-### 4. Interactive Navigation Intelligence
-```mermaid
-graph TD
-  Map[Map Interface] --> Click[Click Landmark]
-  Click --> Compute{Route Type}
-  Compute -->|Standard| Direct[Calculate Direct Path - 410m, 5 mins]
-  Compute -->|ADA Wheelchair| ADA[Calculate Step-Free Route - 620m, 9 mins]
-  Direct --> Draw[Draw Polyline on Leaflet]
-  ADA --> Draw
-```
-
-### 5. Google Gemini AI Query Flow
-```mermaid
-graph TD
-  Input[User Prompt] --> Validate{Check API Key}
-  Validate -->|Configured| GeminiCall[Query Gemini 1.5 API]
-  Validate -->|Missing| MockFallback[Smart Offline Fallback]
-  GeminiCall --> Parse[Extract Action Tags]
-  MockFallback --> Parse
-  Parse -->|Focus Action| ZoomMap[Focus Map on Landmark]
-  Parse -->|Route Action| DrawRoute[Draw Route on Map]
-  Parse --> Output[Display Text Answer]
 ```
 
 ---
@@ -187,16 +177,15 @@ fifastadium-ai/
 ├── public/                 # Static public resources
 ├── src/
 │   ├── components/         # Modular presentation pages & widgets
-│   │   ├── Admin/          # AdminPanel.tsx (Telemetry controls)
-│   │   ├── AI/             # AIAssistant.tsx (Gemini chat window)
-│   │   ├── Auth/           # LoginPage.tsx (Bypass routes)
-│   │   ├── CommandCenter/  # CommandCenter.tsx (CCTV CV & alarm board)
-│   │   ├── Dashboard/      # SmartDashboard.tsx (Recharts telemetry widgets)
-│   │   ├── Landing/        # LandingPage.tsx (Intro view)
-│   │   ├── Map/            # StadiumMap.tsx (Leaflet interactive controller)
-│   │   ├── Shared/         # Layout.tsx (Sidebar navigation, Anish Wani card)
-│   │   │                   # AlertBanner.tsx (SIREN alerts)
-│   │   └── Sustainability/ # SustainabilityDashboard.tsx (Eco rewards)
+│   │   ├── Admin/          # AdminPanel.tsx
+│   │   ├── AI/             # AIAssistant.tsx
+│   │   ├── Auth/           # LoginPage.tsx
+│   │   ├── CommandCenter/  # CommandCenter.tsx
+│   │   ├── Dashboard/      # SmartDashboard.tsx
+│   │   ├── Landing/        # LandingPage.tsx
+│   │   ├── Map/            # StadiumMap.tsx
+│   │   ├── Shared/         # Layout.tsx, AlertBanner.tsx
+│   │   └── Sustainability/ # SustainabilityDashboard.tsx
 │   ├── context/            # Global state context hooks
 │   │   ├── AuthContext.tsx
 │   │   ├── LanguageContext.tsx
@@ -340,7 +329,7 @@ User roles are mapped via Context API and gate page access:
 
 ### Prerequisites
 * [Node.js](https://nodejs.org/) (v18 or higher)
-* [NPM](https://www.npmjs.com/) or [Yarn](https://yarnpkg.com/)
+* [NPM](https://www.npmjs.com/)
 
 ### 1. Clone the Repository
 ```bash
@@ -350,15 +339,11 @@ cd fifastadium-ai
 
 ### 2. Install Dependencies
 ```bash
-npm install --no-audit --no-fund --prefer-offline
+npm install
 ```
 
 ### 3. Setup Environment Variables
 Create a `.env` file in the root directory:
-```bash
-copy .env.example .env
-```
-Fill in your Google Gemini API key:
 ```env
 VITE_GEMINI_API_KEY=your_gemini_api_key_here
 ```
@@ -367,46 +352,57 @@ VITE_GEMINI_API_KEY=your_gemini_api_key_here
 ```bash
 npm run dev
 ```
-Open **`http://localhost:3001`** in your browser.
 
-### 5. Build for Production
+### 5. Build & Test Verification
 ```bash
+# Verify TypeScript compiles without warnings
 npm run build
-```
-Vite will compile the code to the `/dist` directory.
 
-### 6. Preview the Build
-```bash
-npm run preview
+# Run unit and integration tests
+npm test
 ```
 
 ---
 
-## ⚙️ Environment Variables
+## 🧪 Testing Suite & Quality Assurance
 
-| Variable | Description | Default Value | Required |
-| :--- | :--- | :--- | :--- |
-| `VITE_GEMINI_API_KEY` | Google Generative AI API Key | *(None)* | Yes (for AI features) |
-| `VITE_FIREBASE_API_KEY` | Firebase API Client Key | *(None)* | Optional (Bypasses to offline) |
-| `VITE_FIREBASE_PROJECT_ID` | Firebase Project Identifier | *(None)* | Optional (Bypasses to offline) |
+To prevent code regressions and ensure premium engineering standards, StadiumMind AI features a complete unit and integration testing suite. The suite executes offline in a sandboxed DOM environment, bypassing external network dependencies.
 
----
+### 🛠️ Test Stack Configuration
+* **Runner & Framework**: [Vitest](https://vitest.dev/) (Vite-native testing framework)
+* **DOM Environment**: `jsdom` (Simulating browser window/document behavior)
+* **Assertions & Rendering**: `@testing-library/react` & `@testing-library/jest-dom`
 
-## 📦 Deployment
+### 📦 Sandbox Stubs (`setup.tsx` / `firebaseMock.ts`)
+To prevent test timeouts and execution failures due to missing browser APIs, the setup file implements these custom mocks:
+* **Firebase SDK Resolver**: Redirects imports of `firebase/app`, `firebase/auth`, `firebase/firestore`, `firebase/storage`, and `firebase/functions` to a local stub file, bypassing external database hits.
+* **Framer Motion Observer**: Mocks browser `IntersectionObserver` to support exit/entry scroll animations.
+* **HTML Element Layout API**: Mocks `Element.prototype.scrollIntoView` which is used in the AI chat stream to automatically focus on new messages.
+* **Speech Synthesis SDK**: Stubs `window.speechSynthesis` and `SpeechSynthesisUtterance` to test audio guide triggering buttons.
+* **Recharts Responsive Container**: Intercepts charts and immediately renders widgets at a mock size of `800x600px`.
+* **Leaflet Maps wrapper**: Substitutes dynamic WebGL maps with container `div` placeholders allowing component validation without loading Leaflet layout vectors.
 
-### Firebase Hosting
-1. Install the Firebase CLI:
-   ```bash
-   npm install -g firebase-tools
-   ```
-2. Log in and initialize the project:
-   ```bash
-   firebase login
-   ```
-3. Deploy the build directory:
-   ```bash
-   firebase deploy
-   ```
+### 🔍 Detailed Test Cases (17 Tests Configured)
+
+#### 1. Context Providers (`src/test/Contexts.test.tsx`)
+* **`LanguageContext`**: Verifies dynamic translation lookup and ensures full-screen language toggle propagates to Spanish, French, German, and Portuguese dictionaries.
+* **`AuthContext`**: Tests login flow bypass triggers for Fan, Staff, and Admin roles and verifies user profile initialization.
+* **`RouterContext`**: Asserts path updates and browser hash history changes when navigating dashboards.
+* **`StadiumStateContext`**: Validates match score increments, evacuation broadcast triggers, and live alarm logging.
+
+#### 2. Core UI Components (`src/test/Components.test.tsx`)
+* **`LandingPage`**: Verifies animated hero headers, call-to-actions, and main entry metrics.
+* **`SmartDashboard`**: Validates telemetry widgets, meteorological stats, and ingress occupancy curves.
+* **`AIAssistant`**: Asserts dynamic chatbot FAQ guide selection dropdown updates, and verifies simulated message dispatch.
+* **`StadiumMap`**: Confirms responsive Leaflet container rendering and focal target indicators.
+* **`CommandCenter`**: Validates surveillance feed grids, simulated threat logs, and paramedic dispatch handlers.
+* **`SustainabilityDashboard`**: Checks carbon offset widgets, solar yield curves, and claims eco score rewards.
+* **`AdminPanel`**: Asserts manual score overrides and emergency drill toggles.
+* **`Layout & Sidebar`**: Validates developer contact badge, social links redirects (YouTube, Instagram, LinkedIn, GitHub), and sidebar menu clearances.
+
+#### 3. Utilities & AI Services (`src/test/Utilities.test.ts`)
+* **AI Fallback Queries**: Evaluates offline AI text replies, location routing coordinates `[ACTION_ROUTE: med-west, standard]`, and ADA wheelchair coordinates mapping.
+* **FAQ Dictionary Data Structure**: Enforces that the localization database holds exactly **50 distinct FAQs**, structured with localized language key-value pairs (`en`, `es`, `fr`, `de`, `pt`).
 
 ---
 
@@ -475,123 +471,24 @@ If no Firebase credentials are found, StadiumMind AI boots into **Offline Mock M
 
 ---
 
-## 🧩 Challenges & Solutions
+## ⚙️ Project Setup & Execution
 
-### 1. Leaflet Container CSS Height Glitch
-* **Challenge**: Leaflet maps would render as 0px height or collapse if the container was inside hidden flex tabs.
-* **Solution**: Implemented a map resizing observer hook and wrapped Leaflet in a custom wrapper component that recalculates the viewport on tab changes.
+### 1. Verification Checklist
+Befor deploying, always run the validation suite:
+```bash
+# Clean build check
+npm run build
 
-### 2. Rollup ESM Path Resolution Error
-* **Challenge**: Rollup failed to build `framer-motion` package scripts due to a bug in version 11's ESM imports on Windows.
-* **Solution**: Downgraded to version `10.16.4`, which uses a stable module system that compiles cleanly.
-
-### 3. Firestore Heartbeat Throttling
-* **Challenge**: Telemetry updates from mock IoT nodes caused high write costs when syncing to Firestore.
-* **Solution**: Added a telemetry heartbeat frequency range slider in the Admin Panel to control state updates.
-
----
-
-## 🎓 Learning Outcomes
-
-Building StadiumMind AI provided deep insights into:
-* **Generative AI Orchestration**: Feeding context prompts to LLMs to generate text answers and action codes.
-* **Geographical Vector Calculators**: Custom calculations to plot accessible routes.
-* **Real-Time Data Tickers**: State synchronization across multiple devices.
-* **Glassmorphism Design Systems**: Building premium dark interfaces with Tailwind CSS.
-
----
-
-## 🤝 Contributing
-
-We welcome contributions to StadiumMind AI!
-1. Fork the Project.
-2. Create a Feature Branch (`git checkout -b feature/AmazingFeature`).
-3. Commit your Changes (`git commit -m 'Add AmazingFeature'`).
-4. Push to the Branch (`git push origin feature/AmazingFeature`).
-5. Open a Pull Request.
-
----
-
-## 📄 License
-
-Distributed under the MIT License. See [LICENSE](https://github.com/AnishCodes-99/fifastadium-ai/blob/master/LICENSE) for more information.
-
----
-
+# Direct unit tests run
+npm test
+```
 ## 👤 Author
 
-**Anish Sunil Wani**
-* **Role**: IT Engineering Student | AI Enthusiast | Full Stack Developer | Content Creator | Digital Marketer
-* **Social Channels**:
+-Anish Sunil Wani-
+#Role: IT Engineering Student | AI Enthusiast | Full Stack Developer | Content Creator | Digital Marketer
+#Social Channels:
   * [YouTube](https://www.youtube.com/@AnishWani_Ai)
   * [Instagram](https://www.instagram.com/anish_inspires)
   * [LinkedIn](https://www.linkedin.com/in/anish-wani-091071374)
   * [GitHub](https://github.com/AnishCodes-99)
-* **Email**: wanianish88@gmail.com
-
----
-
-## 🙏 Acknowledgements
-
-* [React](https://reactjs.org/)
-* [Firebase](https://firebase.google.com/)
-* [Google Gemini AI](https://deepmind.google/technologies/gemini/)
-* [Leaflet.js](https://leafletjs.com/)
-* [Tailwind CSS](https://tailwindcss.com/)
-* [Framer Motion](https://www.framer.com/motion/)
-* [Recharts](https://recharts.org/)
-* [Lucide Icons](https://lucide.dev/)
-* [OpenStreetMap](https://www.openstreetmap.org/)
-
-
-## 🧪 Testing Suite & Quality Assurance
-
-To maximize code reliability, prevent regressions, and ensure premium QA standards, StadiumMind AI features a complete, custom-mocked unit and integration testing suite. The suite executes offline in a sandboxed DOM environment, bypassing network dependencies.
-
-### 🛠️ Test Stack Configuration
-* **Runner & Framework**: [Vitest](https://vitest.dev/) (Vite-native testing framework)
-* **DOM Environment**: `jsdom` (Simulating browser window/document behavior)
-* **Assertions & Rendering**: `@testing-library/react` & `@testing-library/jest-dom`
-
----
-
-### 📦 Implemented Mocks & Sandbox Stubs (`setup.tsx` / `firebaseMock.ts`)
-To prevent test timeouts and execution failures due to missing browser APIs, the setup file implements these custom mocks:
-* **Firebase SDK Resolver**: Redirects imports of `firebase/app`, `firebase/auth`, `firebase/firestore`, `firebase/storage`, and `firebase/functions` to a local stub file, bypassing external database hits.
-* **Framer Motion Observer**: Mocks browser `IntersectionObserver` to support exit/entry scroll animations without node reference errors in Node.js.
-* **HTML Element Layout API**: Mocks `Element.prototype.scrollIntoView` which is used in the AI chat stream to automatically focus on new messages.
-* **Speech Synthesis SDK**: Stubs `window.speechSynthesis` and `SpeechSynthesisUtterance` to test audio guide triggering buttons.
-* **Recharts Responsive Container**: Intercepts charts and immediately renders widgets at a mock size of `800x600px` to bypass parent layout checks in JSDOM.
-* **Leaflet Maps wrapper**: Substitutes dynamic WebGL maps with container `div` placeholders (`mock-map-container`, `mock-polyline`, etc.) allowing component validation without loading Leaflet layout vectors.
-
----
-
-### 🔍 Detailed Test Cases (17 Tests Configured)
-
-#### 1. Context Providers (`src/test/Contexts.test.tsx`)
-* **`LanguageContext`**: Verifies dynamic translation lookup and ensures full-screen language toggle propagates to Spanish, French, German, and Portuguese dictionaries.
-* **`AuthContext`**: Tests login flow bypass triggers for Fan, Staff, and Admin roles and verifies user profile initialization.
-* **`RouterContext`**: Asserts path updates and browser hash history changes when navigating dashboards.
-* **`StadiumStateContext`**: Validates match score increments, evacuation broadcast triggers, and live alarm logging.
-
-#### 2. Core UI Components (`src/test/Components.test.tsx`)
-* **`LandingPage`**: Verifies animated hero headers, call-to-actions, and main entry metrics.
-* **`SmartDashboard`**: Validates telemetry widgets, meteorological stats, and ingress occupancy curves.
-* **`AIAssistant`**: Asserts dynamic chatbot FAQ guide selection dropdown updates, and verifies simulated message dispatch.
-* **`StadiumMap`**: Confirms responsive Leaflet container rendering and focal target indicators.
-* **`CommandCenter`**: Validates surveillance feed grids, simulated threat logs, and paramedic dispatch handlers.
-* **`SustainabilityDashboard`**: Checks carbon offset widgets, solar yield curves, and claims eco score rewards.
-* **`AdminPanel`**: Asserts manual score overrides and emergency drill toggles.
-* **`Layout & Sidebar`**: Validates developer contact badge, social links redirects (YouTube, Instagram, LinkedIn, GitHub), and sidebar menu clearances.
-
-#### 3. Utilities & AI Services (`src/test/Utilities.test.ts`)
-* **AI Fallback Queries**: Evaluates offline AI text replies, location routing coordinates `[ACTION_ROUTE: med-west, standard]`, and ADA wheelchair coordinates mapping.
-* **FAQ Dictionary Data Structure**: Enforces that the localization database holds exactly **50 distinct FAQs**, structured with localized language key-value pairs (`en`, `es`, `fr`, `de`, `pt`).
-
----
-
-### 🚀 Running the Test Suite Locally
-
-1. **Install Dependencies**:
-   ```bash
-   npm install
+#Email: wanianish88@gmail.com

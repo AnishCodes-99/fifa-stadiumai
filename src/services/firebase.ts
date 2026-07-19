@@ -20,10 +20,10 @@ const isFirebaseConfigured =
   firebaseConfig.projectId !== 'YOUR_FIREBASE_PROJECT_ID_HERE';
 
 let app;
-let auth: any = null;
-let db: any = null;
-let storage: any = null;
-let functions: any = null;
+let auth: ReturnType<typeof getAuth> | null = null;
+let db: ReturnType<typeof getFirestore> | null = null;
+let storage: ReturnType<typeof getStorage> | null = null;
+let functions: ReturnType<typeof getFunctions> | null = null;
 let firebaseEnabled = false;
 
 if (isFirebaseConfigured) {
