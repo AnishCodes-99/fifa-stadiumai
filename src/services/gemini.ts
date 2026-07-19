@@ -272,7 +272,7 @@ const generateFallbackResponse = (query: string, language: string = 'en'): AIRes
 };
 
 export const askGemini = async (query: string, language: string = 'en'): Promise<AIResponse> => {
-  const sanitizedQuery = typeof query === 'string' ? query.trim().slice(0, 1000) : '';
+    const sanitizedQuery = typeof query === 'string' ? query.replace(/<[^>]*>/g, '').trim().slice(0, 1000) : '';
   if (!sanitizedQuery) {
     return {
       text: language === 'es' 

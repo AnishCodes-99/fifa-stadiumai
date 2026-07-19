@@ -57,12 +57,13 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       <p className="font-extrabold text-white text-xs mt-0.5">Anish Wani</p>
       
       <div className="flex gap-2.5 mt-2.5">
-        <a 
+                <a 
           href="https://www.youtube.com/@AnishWani_Ai" 
           target="_blank" 
           rel="noopener noreferrer" 
           className="text-gray-400 hover:text-red-500 transition-colors" 
           title="YouTube"
+          aria-label="YouTube Channel"
         >
           <Youtube size={15} />
         </a>
@@ -72,6 +73,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
           rel="noopener noreferrer" 
           className="text-gray-400 hover:text-pink-500 transition-colors" 
           title="Instagram"
+          aria-label="Instagram Profile"
         >
           <Instagram size={15} />
         </a>
@@ -81,6 +83,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
           rel="noopener noreferrer" 
           className="text-gray-400 hover:text-blue-500 transition-colors" 
           title="LinkedIn"
+          aria-label="LinkedIn Profile"
         >
           <Linkedin size={15} />
         </a>
@@ -90,6 +93,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
           rel="noopener noreferrer" 
           className="text-gray-400 hover:text-white transition-colors" 
           title="GitHub"
+          aria-label="GitHub Repository"
         >
           <Github size={15} />
         </a>
@@ -142,10 +146,11 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
           {/* Syncing Language Selector in Header */}
           <div className="flex items-center gap-1.5 bg-white/5 border border-white/10 rounded-full px-2 py-1">
             <Globe size={13} className="text-gray-400" />
-            <select
+                        <select
               value={language}
               onChange={(e) => setLanguage(e.target.value as 'en' | 'es' | 'fr' | 'de' | 'pt')}
               className="bg-transparent border-none text-[11px] font-bold focus:outline-none text-gray-300 cursor-pointer pr-1"
+              aria-label="Select Language"
             >
               <option value="en" className="bg-darkBg">English</option>
               <option value="es" className="bg-darkBg">Español</option>

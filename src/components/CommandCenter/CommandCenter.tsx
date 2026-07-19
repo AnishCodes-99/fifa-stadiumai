@@ -140,17 +140,19 @@ export const CommandCenter: React.FC = () => {
     resolveIncident(id);
   };
 
-  const handleCreateIncident = (e: React.FormEvent) => {
+    const handleCreateIncident = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newIncidentTitle || !newIncidentLocation) return;
+    const sanitizedTitle = newIncidentTitle.replace(/<[^>]*>/g, '').trim().slice(0, 100);
+    const sanitizedLocation = newIncidentLocation.replace(/<[^>]*>/g, '').trim().slice(0, 100);
+    if (!sanitizedTitle || !sanitizedLocation) return;
     
     const lat = 40.8135 + (Math.random() - 0.5) * 0.003;
     const lng = -74.0744 + (Math.random() - 0.5) * 0.003;
 
     addIncident(
       newIncidentSeverity === 'critical' ? 'security' : 'facility',
-      newIncidentTitle,
-      newIncidentLocation,
+      sanitizedTitle,
+      sanitizedLocation,
       newIncidentSeverity,
       [lat, lng]
     );

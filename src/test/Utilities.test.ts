@@ -15,12 +15,17 @@ describe('Gemini AI Fallback Service', () => {
     expect(res.action?.targetId).toBe('exit-n');
   });
 
-  it('detects wheelchair queries and recommends ADA routes', async () => {
+    it('detects wheelchair queries and recommends ADA routes', async () => {
     const res = await askGemini('Where is the wheelchair access path?');
     expect(res.text.includes('ACCESSIBILITY') || res.text.includes('ACCESIBILIDAD')).toBe(true);
     expect(res.action?.type).toBe('route');
     expect(res.action?.targetId).toBe('gate-a');
     expect(res.action?.routeType).toBe('wheelchair');
+  });
+
+  it('handles empty or blank queries safely', async () => {
+    const res = await askGemini('   ');
+    expect(res.text).toContain('Please enter a valid question.');
   });
 });
 
